@@ -12,50 +12,46 @@ require("dotenv").config();
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
+}).then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('Failed to connect to MongoDB:', err));
 
 // Define schema and model for user1 collection
 const user1Schema = new mongoose.Schema({
-  title: String,
-  amount: Number
+  title: { type: String, required: true },
+  amount: { type: Number, required: true }
 });
 
-const User1 = mongoose.model("user1", user1Schema);
+const User1 = mongoose.model("User1", user1Schema);
 
 // Define schema and model for user2 collection
 const user2Schema = new mongoose.Schema({
-  title: String,
-  amount: Number
+  title: { type: String, required: true },
+  amount: { type: Number, required: true }
 });
 
-const User2 = mongoose.model("user2", user2Schema);
+const User2 = mongoose.model("User2", user2Schema);
 
-//schema for adding the purchasing product
-
-const user1purchaseSchema = new mongoose.Schema({
-  title: String,
-  amount: Number
+// Schema for adding the purchasing product
+const userPurchaseSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  amount: { type: Number, required: true }
 });
 
-const User1purchase = mongoose.model("user1purchase", user1purchaseSchema);
-
-
-const user2purchaseSchema = new mongoose.Schema({
-  title: String,
-  amount: Number
-});
-
-const User2purchase = mongoose.model("user2purchase", user2purchaseSchema);
-
+const User1purchase = mongoose.model("User1purchase", userPurchaseSchema);
+const User2purchase = mongoose.model("User2purchase", userPurchaseSchema);
 
 app.use(bodyParser.json());
 
+// Middleware for logging requests
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path} - ${JSON.stringify(req.body)}`);
+  next();
+});
+
 // Route to add data to user1 collection
 app.post("/api/user1", async (req, res) => {
-  const newData = new User1({
-    title: req.body.title,
-    amount: req.body.amount
-  });
+  const { title, amount } = req.body;
+  const newData = new User1({ title, amount });
 
   try {
     const savedData = await newData.save();
@@ -77,10 +73,8 @@ app.get("/api/user1", async (req, res) => {
 
 // Route to add data to user2 collection
 app.post("/api/user2", async (req, res) => {
-  const newData = new User2({
-    title: req.body.title,
-    amount: req.body.amount
-  });
+  const { title, amount } = req.body;
+  const newData = new User2({ title, amount });
 
   try {
     const savedData = await newData.save();
@@ -102,10 +96,8 @@ app.get("/api/user2", async (req, res) => {
 
 // Route to add data of the user1 purchase
 app.post("/api/user1purchase", async (req, res) => {
-  const newData = new User1purchase({
-    title: req.body.title,
-    amount: req.body.amount
-  });
+  const { title, amount } = req.body;
+  const newData = new User1purchase({ title, amount });
 
   try {
     const savedData = await newData.save();
@@ -118,10 +110,8 @@ app.post("/api/user1purchase", async (req, res) => {
 
 // Route to add data of the user2 purchase
 app.post("/api/user2purchase", async (req, res) => {
-  const newData = new User2purchase({
-    title: req.body.title,
-    amount: req.body.amount
-  });
+  const { title, amount } = req.body;
+  const newData = new User2purchase({ title, amount });
 
   try {
     const savedData = await newData.save();
