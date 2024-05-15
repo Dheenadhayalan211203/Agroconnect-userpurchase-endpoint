@@ -72,17 +72,17 @@ app.get("/api/user1", async (req, res) => {
 });
 
 // Route to add data to user2 collection
-app.post("/api/user2", async (req, res) => {
+app.post('/api/user2', async (req, res) => {
   const { title, amount } = req.body;
-  const newData = new User2({ title, amount });
-
   try {
-    const savedData = await newData.save();
-    res.status(201).json(savedData);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
+    const newProduct = new Product({ title, amount });
+    await newProduct.save();
+    res.status(201).json(newProduct);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to add product' });
   }
 });
+
 
 // Route to get data from user2 collection
 app.get("/api/user2", async (req, res) => {
