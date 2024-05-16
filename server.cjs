@@ -157,7 +157,7 @@ app.delete("/api/user1/:id", async (req, res) => {
     }
     res.json({ message: "product deleted" });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message:"error in  deleting cart item"  });
   }
 });
 
