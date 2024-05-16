@@ -150,8 +150,12 @@ app.delete("/api/user1/:id", async (req, res) => {
   const id = req.params.id;
   console.log(`Attempting to delete product with ID: ${id}`); // Log the ID being deleted
 
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "Invalid ID format" });
+  }
+
   try {
-    const deletedProduct = await User1.findOneAndDelete({ _id: id });
+    const deletedProduct = await User1.findByIdAndDelete(id);
     if (!deletedProduct) {
       return res.status(404).json({ message: "Product not found" });
     }
@@ -161,6 +165,7 @@ app.delete("/api/user1/:id", async (req, res) => {
     res.status(500).json({ message: "Error in deleting cart item" });
   }
 });
+
 
 
 
