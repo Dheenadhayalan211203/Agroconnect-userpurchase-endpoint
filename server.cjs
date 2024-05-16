@@ -145,6 +145,25 @@ app.get("/api/user2purchase", async (req, res) => {
   }
 });
 
+//delete cart item
+
+app.delete("/api/user1/:id", async (req, res) => {
+  try {
+    const deletedExpense = await user1.findOneAndDelete({
+      _id: req.params.id,
+    });
+    if (!deletedExpense) {
+      return res.status(404).json({ message: "product not found" });
+    }
+    res.json({ message: "product deleted" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+
+
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
