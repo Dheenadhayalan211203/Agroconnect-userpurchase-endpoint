@@ -147,18 +147,21 @@ app.get("/api/user2purchase", async (req, res) => {
 
 // Route to delete an item from user1 collection
 app.delete("/api/user1/:id", async (req, res) => {
+  const id = req.params.id;
+  console.log(`Attempting to delete product with ID: ${id}`); // Log the ID being deleted
+
   try {
-    const deletedProduct = await User1.findOneAndDelete({
-      _id: req.params.id,
-    });
+    const deletedProduct = await User1.findOneAndDelete({ _id: id });
     if (!deletedProduct) {
       return res.status(404).json({ message: "Product not found" });
     }
     res.json({ message: "Product deleted" });
   } catch (err) {
+    console.error("Error in deleting product:", err); // More detailed logging
     res.status(500).json({ message: "Error in deleting cart item" });
   }
 });
+
 
 
 
